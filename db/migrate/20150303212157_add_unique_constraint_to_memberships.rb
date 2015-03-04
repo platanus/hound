@@ -1,9 +1,11 @@
 class AddUniqueConstraintToMemberships < ActiveRecord::Migration
   def self.up
-    remove_duplicate_memberships
+    transaction do
+      remove_duplicate_memberships
 
-    add_index :memberships, [:user_id, :repo_id], unique: true
-    remove_index :memberships, column: :user_id
+      add_index :memberships, [:user_id, :repo_id], unique: true
+      remove_index :memberships, column: :user_id
+    end
   end
 
   def self.down
@@ -21,6 +23,6 @@ class AddUniqueConstraintToMemberships < ActiveRecord::Migration
         m.id < m2.id
     SQL
 
-    connection.execute(sql)
+    execute(sql)
   end
 end
