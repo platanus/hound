@@ -19,6 +19,10 @@ class PaymentGatewayCustomer
     end
   end
 
+  def subscriptions
+    customer.subscriptions.data
+  end
+
   def update_card(card_token)
     customer.card = card_token
     customer.save
