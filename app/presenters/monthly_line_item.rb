@@ -1,31 +1,42 @@
 class MonthlyLineItem
   include ActionView::Helpers::NumberHelper
 
-  def initialize(price, repos)
-    @price = price
-    @repos = repos
+  def initialize(subscription)
+    @subscription = subscription
   end
 
   def title
-    case @repos.first.subscription_price
-    when 9
+    case @subscription.plan.name
+    when "Personal"
       "Private Personal Repos"
-    when 12
+    when "Private"
       "Private Repos"
-    when 24
+    when "Organization"
       "Private Org Repos"
+    else
+      @subscription.plan.name
     end
   end
 
   def base_price
-    "#{number_to_currency(@price, precision: 0)}/mo."
+    "#{number_to_currency(amount_in_dollars, precision: 0)}/mo."
   end
 
   def quantity
-    "x#{@repos.count}"
+    "x#{@subscription.quantity}"
   end
 
   def subtotal
-    number_to_currency(@repos.sum(&:subscription_price), precision: 0)
+    number_to_currency(subtotal_in_dollars, precision: 0)
+  end
+
+  def subtotal_in_dollars
+    @subscription.quantity * amount_in_dollars
+  end
+
+  private
+
+  def amount_in_dollars
+    @subscription.plan.amount / 100
   end
 end

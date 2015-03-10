@@ -53,6 +53,10 @@ class PaymentGatewayCustomer
     def retrieve(*_args)
       nil
     end
+
+    def data
+      []
+    end
   end
 
   class BlankCard

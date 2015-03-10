@@ -39,6 +39,10 @@ class User < ActiveRecord::Base
     repos.active.count > 0
   end
 
+  def payment_gateway_subscriptions
+    @payment_gateway_subscriptions ||= payment_gateway_customer.subscriptions
+  end
+
   private
 
   def payment_gateway_customer

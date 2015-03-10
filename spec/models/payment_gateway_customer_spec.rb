@@ -79,16 +79,18 @@ describe PaymentGatewayCustomer do
     end
   end
 
-  describe '#subscriptions' do
+  describe "#subscriptions" do
     context "when stripe_customer_id is present" do
       it "retrieves subscriptions data" do
         user = build_stubbed(:user, stripe_customer_id: stripe_customer_id)
         stub_customer_find_request
-        payment_gateway_customer = PaymentGatewayCustomer.new(user)
-        subscriptions = payment_gateway_customer.subscriptions
 
-        expect(subscriptions.length).to eq 1
-        expect(subscriptions.first).to be_an_instance_of(Stripe::Subscription)
+        payment_gateway_customer = PaymentGatewayCustomer.new(user)
+        subscription = payment_gateway_customer.subscriptions.first
+
+        expect(subscription.quantity).to eq 1
+        expect(subscription.plan.amount).to eq 1200
+        expect(subscription.plan.name).to eq "Private"
       end
     end
   end

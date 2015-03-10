@@ -23,10 +23,10 @@ module StripeApiHelper
     )
   end
 
-  def stub_customer_find_request
+  def stub_customer_find_request(customer_id = stripe_customer_id)
     stub_request(
       :get,
-      "#{stripe_base_url}/#{stripe_customer_id}"
+      "#{stripe_base_url}/#{customer_id}"
     ).with(
       headers: { "Authorization" => "Bearer #{ENV["STRIPE_API_KEY"]}" }
     ).to_return(

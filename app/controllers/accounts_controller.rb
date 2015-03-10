@@ -1,6 +1,9 @@
 class AccountsController < ApplicationController
   def show
-    @account_page = AccountPage.new(find_subscribed_repos)
+    @account_page = AccountPage.new(
+      find_subscribed_repos,
+      current_user.payment_gateway_subscriptions
+    )
   end
 
   private
