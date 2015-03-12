@@ -23,9 +23,27 @@ describe RepoConfig do
         commit = double("Commit", file_content: <<-EOS.strip_heredoc)
           ruby:
             enabled: true
-          coffee_script:
+          coffeescript:
             enabled: true
-          java_script:
+          javascript:
+            enabled: true
+          scss:
+            enabled: true
+        EOS
+        repo_config = RepoConfig.new(commit)
+
+        RepoConfig::LANGUAGES.each do |language|
+          expect(repo_config).to be_enabled_for(language)
+        end
+      end
+
+      it "returns false for all languages" do
+        commit = double("Commit", file_content: <<-EOS.strip_heredoc)
+          ruby:
+            enabled: true
+          coffeescript:
+            enabled: true
+          javascript:
             enabled: true
           scss:
             enabled: true
@@ -43,9 +61,9 @@ describe RepoConfig do
         commit = double("Commit", file_content: <<-EOS.strip_heredoc)
           ruby:
             enabled: false
-          coffee_script:
+          coffeescript:
             enabled: false
-          java_script:
+          javascript:
             enabled: false
           scss:
             enabled: false
@@ -187,7 +205,7 @@ describe RepoConfig do
           }
         EOS
 
-        result = config.for("coffee_script")
+        result = config.for("coffeescript")
 
         expect(result).to eq(
           "no_unnecessary_double_quotes" => { "level" => "error" }
@@ -204,7 +222,7 @@ describe RepoConfig do
             }
           EOS
 
-          result = config.for("java_script")
+          result = config.for("javascript")
 
           expect(result).to eq("predef" => ["hello"])
         end
@@ -218,7 +236,7 @@ describe RepoConfig do
             }
           EOS
 
-          result = config.for("java_script")
+          result = config.for("javascript")
 
           expect(result).to eq({})
         end
@@ -292,7 +310,7 @@ describe RepoConfig do
           EOIGNORE
 
           hound_config = <<-EOS
-            java_script:
+            javascript:
               enabled: true
           EOS
 
@@ -311,7 +329,7 @@ describe RepoConfig do
       context "custom jshint ignore path provided" do
         it "uses the custom ignore file" do
           hound_config = <<-EOS
-            java_script:
+            javascript:
               enabled: true
               ignore_file: ".js_ignore"
           EOS
@@ -355,11 +373,11 @@ describe RepoConfig do
           enabled: true
           config_file: config/rubocop.yml
 
-        coffee_script:
+        coffeescript:
           enabled: true
           config_file: coffeelint.json
 
-        java_script:
+        javascript:
           enabled: true
           config_file: #{file_path}
 
@@ -375,5 +393,25 @@ describe RepoConfig do
 
       RepoConfig.new(commit)
     end
+  end
+
+  it "converts legacy coffee_script key to coffeescript" do
+    commit = double("Commit", file_content: <<-EOS.strip_heredoc)
+      coffee_script:
+        enabled: false
+    EOS
+    repo_config = RepoConfig.new(commit)
+
+    expect(repo_config).not_to be_enabled_for("coffeescript")
+  end
+
+  it "converts legacy java_script key to javascript" do
+    commit = double("Commit", file_content: <<-EOS.strip_heredoc)
+      java_script:
+        enabled: false
+    EOS
+    repo_config = RepoConfig.new(commit)
+
+    expect(repo_config).not_to be_enabled_for("javascript")
   end
 end

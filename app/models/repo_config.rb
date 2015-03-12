@@ -1,11 +1,11 @@
 # Load and parse config files from GitHub repo
 class RepoConfig
   HOUND_CONFIG = ".hound.yml"
-  LANGUAGES = %w(ruby coffee_script java_script scss)
+  LANGUAGES = %w(ruby coffeescript javascript scss)
   FILE_TYPES = {
     "ruby" => "yaml",
-    "java_script" => "json",
-    "coffee_script" => "json",
+    "javascript" => "json",
+    "coffeescript" => "json",
     "scss" => "yaml",
   }
 
@@ -43,7 +43,7 @@ class RepoConfig
   private
 
   def options_for(language)
-    hound_config[language] || hound_config[language.camelize]
+    hound_config[language] || hound_config[language_camelize(language)]
   end
 
   def disabled?(language)
@@ -55,7 +55,7 @@ class RepoConfig
     @hound_config ||= begin
       config = load_file(HOUND_CONFIG, "yaml")
       if config.is_a?(Hash)
-        config
+        convert_legacy_keys(config)
       else
         {}
       end
@@ -86,7 +86,7 @@ class RepoConfig
   end
 
   def load_javascript_ignore
-    ignore_file = hound_config.fetch("java_script", {}).
+    ignore_file = hound_config.fetch("javascript", {}).
       fetch("ignore_file", ".jshintignore")
 
     commit.file_content(ignore_file)
@@ -102,5 +102,29 @@ class RepoConfig
     JSON.parse(content)
   rescue JSON::ParserError
     {}
+  end
+
+  def convert_legacy_keys(config)
+    converted_config = config.except("java_script", "coffee_script")
+
+    if config["java_script"]
+      converted_config["javascript"] = config["java_script"]
+    end
+    if config["coffee_script"]
+      converted_config["coffeescript"] = config["coffee_script"]
+    end
+
+    converted_config
+  end
+
+  def language_camelize(language)
+    case language.downcase
+    when "coffeescript"
+      "CoffeeScript"
+    when "javascript"
+      "JavaScript"
+    else
+      language.camelize
+    end
   end
 end
