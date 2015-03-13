@@ -1,9 +1,7 @@
 class MonthlyLineItem
   include ActionView::Helpers::NumberHelper
 
-  def initialize(subscription)
-    @subscription = subscription
-  end
+  vattr_initialize :subscription
 
   def title
     case @subscription.plan.name

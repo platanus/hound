@@ -31,11 +31,11 @@ feature "Account" do
       ])
     )
     individual_repo = create(:repo, users: [user])
-    create(:subscription, repo: individual_repo, user: user, price: 9)
+    create(:subscription, repo: individual_repo, user: user, price: 9,)
     private_repo = create(:repo, users: [user])
-    create(:subscription, repo: private_repo, user: user, price: 12)
+    create(:subscription, repo: private_repo, user: user, price: 12,)
     organization_repo = create(:repo, users: [user])
-    create(:subscription, repo: organization_repo, user: user, price: 24)
+    create(:subscription, repo: organization_repo, user: user, price: 24,)
     public_repo = create(:repo, users: [user])
 
     sign_in_as(user)
@@ -73,7 +73,7 @@ feature "Account" do
       headers: { "Authorization" => "Bearer #{ENV['STRIPE_API_KEY']}" }
     ).to_return(
       status: 200,
-      body: merge_customer_subscriptions(subscriptions)
+      body: merge_customer_subscriptions(subscriptions),
     )
   end
 

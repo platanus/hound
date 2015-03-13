@@ -1,12 +1,7 @@
 class AccountPage
   include ActionView::Helpers::NumberHelper
 
-  attr_reader :repos
-
-  def initialize(repos, subscriptions)
-    @repos = repos
-    @subscriptions = subscriptions
-  end
+  vattr_initialize :repos, :subscriptions
 
   def monthly_line_items
     @monthly_line_items ||= @subscriptions.map do |subscription|
