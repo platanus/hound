@@ -94,7 +94,6 @@ Style/CollectionMethods:
     detect: find
     find_all: select
     find: detect
-    reduce: inject
 Style/CommentAnnotation:
   Description: Checks formatting of special comments (TODO, FIXME, OPTIMIZE, HACK,
     REVIEW).
@@ -255,7 +254,7 @@ Style/MethodName:
 Style/MultilineOperationIndentation:
   Description: Checks indentation of binary operations that span more than one line.
   Enabled: true
-  EnforcedStyle: aligned
+  EnforcedStyle: indented
   SupportedStyles:
   - aligned
   - indented

@@ -14,6 +14,26 @@ feature "Repo list", js: true do
     expect(page).to have_content repo.full_github_name
   end
 
+  scenario "user sees onboarding" do
+    user = create(:user)
+    sign_in_as(user)
+
+    visit repos_path
+
+    expect(page).to have_content I18n.t("onboarding.title")
+  end
+
+  scenario "user does not see onboarding" do
+    user = create(:user)
+    build = create(:build)
+    build.repo.users << user
+    sign_in_as(user)
+
+    visit repos_path
+
+    expect(page).to_not have_content I18n.t("onboarding.title")
+  end
+
   scenario "user views list" do
     user = create(:user)
     repo = create(:repo, full_github_name: "thoughtbot/my-repo")
@@ -49,7 +69,7 @@ feature "Repo list", js: true do
 
     expect(page).to have_content(repo.full_github_name)
 
-    click_link I18n.t("sync_repos")
+    click_button I18n.t("sync_repos")
 
     expect(page).to have_text("jimtom/My-Private-Repo")
     expect(page).not_to have_text(repo.full_github_name)
