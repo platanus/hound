@@ -6,6 +6,7 @@ class HoundConfig
     jshint
     remark
     python
+    tslint
   ).freeze
   CONFIG_FILE = ".hound.yml"
 

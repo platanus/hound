@@ -12,6 +12,7 @@ module Linter
       Linter::Ruby,
       Linter::Scss,
       Linter::Swift,
+      Linter::Tslint,
     ].freeze
 
     def self.linter_names
