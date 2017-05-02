@@ -4,22 +4,22 @@ class HoundConfig
   LINTERS = {
     Linter::CoffeeScript => { default: true },
     Linter::Credo => { default: false },
-    Linter::Eslint => { default: false },
+    Linter::Eslint => { default: true },
     Linter::Flake8 => { default: false },
     Linter::Flog => { default: false },
     Linter::Golint => { default: true },
     Linter::Haml => { default: true },
-    Linter::Jshint => { default: true },
+    Linter::Jshint => { default: false },
     Linter::Reek => { default: false },
     Linter::Remark => { default: false },
     Linter::Rubocop => { default: true },
     Linter::SassLint => { default: false },
-    Linter::Scss => { default: true },
+    Linter::Scss => { default: false },
     Linter::Shellcheck => { default: false },
     Linter::SlimLint => { default: false },
-    Linter::Stylelint => { default: false },
+    Linter::Stylelint => { default: true },
     Linter::Swift => { default: true },
-    Linter::Tslint => { default: false },
+    Linter::Tslint => { default: true },
   }.freeze
 
   attr_initialize [:commit!, :owner!]
